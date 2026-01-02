@@ -1,6 +1,7 @@
 # AI-Based-Customer-Support-Analytics-Decision-Support-System
-This project is an AI-based customer support system where users can chat to report problems. The system uses machine learning to understand customer feelings, issues, and urgency. All messages are stored and shown in a dashboard to help managers analyze customer behavior and improve service.
-SmartCare AI – AI-Based Customer Support & Analytics System
+This project is an AI based customer support system where users can chat to report problems. The system uses machine learning to understand customer feelings, issues, and urgency. All messages are stored and shown in a dashboard to help managers analyze customer behavior and improve service.
+ 
+
 📌 Project Description
 
 SmartCare AI is a web-based customer support system that uses Artificial Intelligence, Machine Learning, and Natural Language Processing (NLP) to analyze customer messages. Customers can chat with the system to report issues, and the system automatically detects sentiment, issue type, and urgency. All data is stored and visualized in a manager dashboard for business insights.

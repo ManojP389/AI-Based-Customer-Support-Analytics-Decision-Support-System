@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Support Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            margin-top: 20px;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            width: 22%;
+            min-width: 200px;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #ccc;
+        }
+
+        .card h2 {
+            color: #2c3e50;
+        }
+
+        .chart-card {
+            background: white;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            box-shadow: 0px 0px 10px #ccc;
+        }
+
+        canvas {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        a {
+            display: inline-block;
+            margin: 20px;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 5px;
+        }
+
+        a:hover {
+            background: #1a252f;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f1f1f1;
+            margin: 8px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Customer Support Analytics Dashboard</h1>
+
+<div class="container">
+
+    <!-- KPI CARDS -->
+    <div class="cards">
+        <div class="card">
+            <h2>Total Messages</h2>
+            <h3>{{ total }}</h3>
+        </div>
+
+        <div class="card">
+            <h2>Positive</h2>
+            <h3>{{ positive }}</h3>
+        </div>
+
+        <div class="card">
+            <h2>Negative</h2>
+            <h3>{{ negative }}</h3>
+        </div>
+
+        <div class="card">
+            <h2>Satisfaction</h2>
+            <h3>{{ satisfaction }}%</h3>
+        </div>
+
+        <div class="card">
+            <h2>Urgent Tickets</h2>
+            <h3>
+                {% for u in urgency_data %}
+                    {% if u[0] == "High" %}
+                        {{ u[1] }}
+                    {% endif %}
+                {% endfor %}
+            </h3>
+        </div>
+    </div>
+
+    <!-- SENTIMENT CHART -->
+    <div class="chart-card">
+        <h2>Customer Sentiment</h2>
+        <canvas id="sentimentChart"></canvas>
+    </div>
+
+    <!-- ISSUE CHART -->
+    <div class="chart-card">
+        <h2>Issue Distribution</h2>
+        <canvas id="issueChart"></canvas>
+    </div>
+
+    <!-- TREND CHART -->
+    <div class="chart-card">
+        <h2>Daily Complaint Trend</h2>
+        <canvas id="trendChart"></canvas>
+    </div>
+
+    <!-- TOP KEYWORDS -->
+    <div class="chart-card">
+        <h2>Top Complaint Keywords</h2>
+        <ul>
+            {% for word, count in top_keywords %}
+                <li>{{ word }} – {{ count }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a href="/">⬅ Back to Chat</a>
+    <a href="/download">📥 Download Report</a>
+
+
+</div>
+
+<script>
+    const sentimentData = {
+        labels: [
+            {% for s in sentiment_data %} "{{ s[0] }}", {% endfor %}
+        ],
+        datasets: [{
+            data: [
+                {% for s in sentiment_data %} {{ s[1] }}, {% endfor %}
+            ]
+        }]
+    };
+
+    const issueData = {
+        labels: [
+            {% for i in issue_data %} "{{ i[0] }}", {% endfor %}
+        ],
+        datasets: [{
+            data: [
+                {% for i in issue_data %} {{ i[1] }}, {% endfor %}
+            ]
+        }]
+    };
+
+    const trendLabels = [
+        {% for t in trend_data %} "{{ t[0] }}", {% endfor %}
+    ];
+
+    const trendValues = [
+        {% for t in trend_data %} {{ t[1] }}, {% endfor %}
+    ];
+
+    new Chart(document.getElementById("sentimentChart"), {
+        type: "pie",
+        data: sentimentData
+    });
+
+    new Chart(document.getElementById("issueChart"), {
+    type: "bar",
+    data: {
+        labels: issueData.labels,
+        datasets: [{
+            label: "Number of Tickets",
+            data: issueData.datasets[0].data
+        }]
+    }
+    });
+
+
+    new Chart(document.getElementById("trendChart"), {
+        type: "line",
+        data: {
+            labels: trendLabels,
+            datasets: [{
+                label: "Total Messages",
+                data: trendValues,
+                fill: false,
+                borderWidth: 2
+            }]
+        }
+    });
+</script>
+
+</body>
+</html>

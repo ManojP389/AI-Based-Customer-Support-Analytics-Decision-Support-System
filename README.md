@@ -50,7 +50,7 @@ Run the application
 
 python app.py
 
-Open in browser
+Will get opened in browser
 
 http://127.0.0.1:5000
 
